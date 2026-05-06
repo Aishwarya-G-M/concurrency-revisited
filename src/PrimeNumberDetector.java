@@ -1,16 +1,23 @@
 import java.util.Scanner;
 
 public class PrimeNumberDetector {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner sc = new Scanner(System.in);
 
         while(true){
             System.out.println("Enter the number: \n");
             Integer input = sc.nextInt();
             if(input==0)break;
-            int nthPrime = calcNthPrime(input);
-            System.out.printf("Nth prime number is :%s\n", nthPrime);
+            Thread th = new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                int nthPrime = calcNthPrime(input);
+                System.out.printf("Nth prime number is :%s\n", nthPrime);
+            });
+            th.start();
         }
     }
 
