@@ -1,0 +1,41 @@
+import java.util.Scanner;
+
+public class PrimeNumberDetector {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while(true){
+            System.out.println("Enter the number: \n");
+            Integer input = sc.nextInt();
+            if(input==0)break;
+            int nthPrime = calcNthPrime(input);
+            System.out.printf("Nth prime number is :%s\n", nthPrime);
+        }
+    }
+
+    private static int calcNthPrime(int input){
+        int ithPrime = 1;
+        int nthPrime = 0;
+        while(nthPrime < input){
+            ithPrime++;
+            if(isPrimeDetector(ithPrime)){
+                nthPrime++;
+            }
+        }
+        return ithPrime;
+    }
+
+    private static boolean isPrimeDetector(Integer input){
+        if (input < 2) return false;
+        if (input == 2) return true;
+        if (input % 2 == 0) return false;
+
+        int sqrt = (int) Math.sqrt(input);
+        for (int i = 3; i <= sqrt; i += 2) {
+            if (input % i == 0) return false;
+        }
+        return true;
+    }
+}
+
