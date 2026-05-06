@@ -17,6 +17,7 @@ public class PrimeNumberDetector {
                 int nthPrime = calcNthPrime(input);
                 System.out.printf("Nth prime number is :%s\n", nthPrime);
             });
+            th.setDaemon(true);
             th.start();
         }
     }
