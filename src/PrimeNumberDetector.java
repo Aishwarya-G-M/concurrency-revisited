@@ -3,14 +3,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PrimeNumberDetector {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner sc = new Scanner(System.in);
         List<Thread> threads = new ArrayList<>();
         Thread monitor = new Thread(() -> {
             while (true) {
                 printThreadStatus(threads);
                 try {
-                    Thread.sleep(1000); // check every 1 second
+                    Thread.sleep(5000); // check every 1 second
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -23,7 +23,12 @@ public class PrimeNumberDetector {
         while(true){
             System.out.println("Enter the number: \n");
             Integer input = sc.nextInt();
-            if(input==0)break;
+            if(input==0){
+                System.out.println("Waiting for remaining threads to complete execution\n");
+                waitForThreads(threads);
+                System.out.println("Done with executing all thread! The number of primes calculated :"+threads.size());
+                break;
+            }
             Thread th = new Thread(() -> {
                 try {
                     Thread.sleep(2000);
@@ -31,7 +36,7 @@ public class PrimeNumberDetector {
                     throw new RuntimeException(e);
                 }
                 int nthPrime = calcNthPrime(input);
-                System.out.printf("Nth prime number is :%s\n", nthPrime);
+                System.out.printf("%sth prime number is :%s\n", input,nthPrime);
             });
             threads.add(th);
             //th.setDaemon(true);
@@ -39,10 +44,15 @@ public class PrimeNumberDetector {
         }
     }
 
+    private static void waitForThreads(List<Thread> threads) throws InterruptedException {
+        for(Thread th : threads){
+            th.join();
+        }
+    }
     private static void printThreadStatus(List<Thread> threads){
        threads
                .forEach(thread -> {
-                   System.out.printf("Thread %s is in %s state.\n",thread.getName(),thread.getState());
+                   System.out.printf("\nThread %s is in %s state.\n",thread.getName(),thread.getState());
                });
     }
 
